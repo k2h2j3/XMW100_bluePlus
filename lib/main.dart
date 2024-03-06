@@ -11,6 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: title,
       home: MyHomePage(title: title),
     );
@@ -36,31 +37,29 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   initState() {
     super.initState();
-    // 블루투스 초기화
+    // 초기화
     initBle();
   }
 
   void initBle() {
-    // BLE 스캔 상태 얻기 위한 리스너
+    // BLE 스캔 상태 리스너
     flutterBlue.isScanning.listen((isScanning) {
       _isScanning = isScanning;
+      // 리스너를 받을 때마다 상태 변경
       setState(() {});
     });
   }
 
-  /*
-  스캔 시작/정지 함수
-  */
   scan() async {
     if (!_isScanning) {
       // 스캔 중이 아니라면
       // 기존에 스캔된 리스트 삭제
       scanResultList.clear();
-      // 스캔 시작, 제한 시간 4초
+      // 스캔 시작, 제한 시간 10초
       flutterBlue.startScan(timeout: Duration(seconds: 10));
-      // 스캔 결과 리스너
+      // 스캔 결과가 바뀔때마다 스트림을 등록하고 결과가 수신될때마다 해당함수 호출
       flutterBlue.scanResults.listen((results) {
-        // 결과 값을 루프로 돌림
+        // 스캔 결과 목록을 순회
         results.forEach((element) {
           //찾는 장치명인지 확인
           if (element.device.name == targetDeviceName) {
@@ -73,7 +72,6 @@ class _MyHomePageState extends State<MyHomePage> {
             }
           }
         });
-
         // UI 갱신
         setState(() {});
       });
@@ -82,20 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
       flutterBlue.stopScan();
     }
   }
-  /*
-   여기서부터는 장치별 출력용 함수들
-  */
-  /*  장치의 신호값 위젯  */
+
+  /*  장치의 신호세기 표시 위젯  */
   Widget deviceSignal(ScanResult r) {
     return Text(r.rssi.toString());
   }
 
-  /* 장치의 MAC 주소 위젯  */
+  /* 장치의 MAC(id) 주소 위젯  */
   Widget deviceMacAddress(ScanResult r) {
     return Text(r.device.id.id);
   }
 
-  /* 장치의 명 위젯  */
+  /* 장치 이름 위젯  */
   Widget deviceName(ScanResult r) {
     String name = '';
 
@@ -137,10 +133,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget listItem(ScanResult r) {
     return ListTile(
       onTap: () => onTap(r),
-      leading: leading(r),
-      title: deviceName(r),
-      subtitle: deviceMacAddress(r),
-      trailing: deviceSignal(r),
+      leading: leading(r), // icon
+      title: deviceName(r), //이름
+      subtitle: deviceMacAddress(r), //id
+      trailing: deviceSignal(r), //신호세기
     );
   }
 
