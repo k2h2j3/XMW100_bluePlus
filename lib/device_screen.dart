@@ -292,7 +292,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       }
     }
 
-    // resultList가 비어 있으면 에러를 방지하기 위해 빈 컨테이너를 반환합니다.
+    // resultList가 비어 있으면 에러를 방지하기 위해 빈 컨테이너를 반환
     if (resultlist.isEmpty) {
       return Container();
     }
