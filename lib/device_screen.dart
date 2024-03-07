@@ -271,11 +271,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
             data = notifyDatas[c.uuid.toString()].toString();
             datalist = parseData(data);
             // 데이터가 있는 경우에만 resultlist에 추가
-            resultlist.add((datalist[2] >> 8) + datalist[3]); // temp
-            resultlist.add((datalist[4] >> 8) + datalist[5]); // unhumi
-            resultlist.add((datalist[6] >> 8) + datalist[7]); // unairp
-            resultlist.add((datalist[8] >> 8) + datalist[9]); // unwd
-            resultlist.add((datalist[10] >> 8) + datalist[11]); // unws
+            resultlist.add((datalist[2] << 8) + datalist[3]); // temp
+            resultlist.add((datalist[4] << 8) + datalist[5]); // unhumi
+            resultlist.add((datalist[6] << 8) + datalist[7]); // unairp
+            resultlist.add((datalist[8] << 8) + datalist[9]); // unwd
+            resultlist.add((datalist[10] << 8) + datalist[11]); // unws
           }
         }
       }
@@ -299,11 +299,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     return Column(
       children: [
-        Text('temp : ${resultlist[0]}'),
-        Text('unHumi : ${resultlist[1]}'),
-        Text('unAirPressure : ${resultlist[2]}'),
-        Text('unWD : ${resultlist[3]}'),
-        Text('unWS : ${resultlist[4]}'),
+        Text('temp : ${resultlist[0]/100}'),
+        Text('unHumi : ${resultlist[1]/100}'),
+        Text('unAirPressure : ${resultlist[2]/100}'),
+        Text('unWD : ${resultlist[3]/100}'),
+        Text('unWS : ${resultlist[4]/100}'),
       ],
     );
   }
