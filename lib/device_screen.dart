@@ -247,25 +247,16 @@ class _DeviceScreenState extends State<DeviceScreen> {
     String name = '';
     String properties = '';
     String data = '';
-    int temp = 0;
-    int unhumi = 0;
-    int unairp = 0;
-    int unwd = 0;
-    int unws = 0;
     List<int> datalist = [];
     List<int> resultlist = [];
+
     // 캐릭터리스틱을 한개씩 꺼내서 표시
     for (BluetoothCharacteristic c in r.characteristics) {
       properties = '';
       data = '';
       name += '\t\t${c.uuid}\n';
-      temp = 0;
-      unhumi = 0;
-      unairp = 0;
-      unwd = 0;
-      unws = 0;
-      datalist = [];
-      resultlist = [];
+      datalist = []; // 데이터 리스트 초기화
+
       if (c.properties.write) {
         properties += 'Write ';
       }
@@ -279,6 +270,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
           if (notifyDatas[c.uuid.toString()]!.isNotEmpty) {
             data = notifyDatas[c.uuid.toString()].toString();
             datalist = parseData(data);
+            // 데이터가 있는 경우에만 resultlist에 추가
+            resultlist.add((datalist[2] >> 8) + datalist[3]); // temp
+            resultlist.add((datalist[4] >> 8) + datalist[5]); // unhumi
+            resultlist.add((datalist[6] >> 8) + datalist[7]); // unairp
+            resultlist.add((datalist[8] >> 8) + datalist[9]); // unwd
+            resultlist.add((datalist[10] >> 8) + datalist[11]); // unws
           }
         }
       }
@@ -292,19 +289,23 @@ class _DeviceScreenState extends State<DeviceScreen> {
       if (data.isNotEmpty) {
         // 받은 데이터 화면에 출력!
         name += '\t\t\t\t$data\n';
-        temp = (datalist[2] << 8) + datalist[3];
-        resultlist.add(temp);
-        unhumi = (datalist[4] << 8) + datalist[5];
-        resultlist.add(unhumi);
-        unairp = (datalist[6] << 8) + datalist[7];
-        resultlist.add(unairp);
-        unwd = (datalist[8] << 8) + datalist[9];
-        resultlist.add(unwd);
-        unws = (datalist[10] << 8) + datalist[11];
-        resultlist.add(unws);
       }
     }
-    return Text(temp.toString());
+
+    // resultList가 비어 있으면 에러를 방지하기 위해 빈 컨테이너를 반환합니다.
+    if (resultlist.isEmpty) {
+      return Container();
+    }
+
+    return Column(
+      children: [
+        Text('temp : ${resultlist[0]}'),
+        Text('unHumi : ${resultlist[1]}'),
+        Text('unAirPressure : ${resultlist[2]}'),
+        Text('unWD : ${resultlist[3]}'),
+        Text('unWS : ${resultlist[4]}'),
+      ],
+    );
   }
 
   List<int> parseData(String jsonData) {
