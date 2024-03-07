@@ -4,16 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class DeviceScreen extends StatefulWidget {
-  DeviceScreen({Key? key, required this.device}) : super(key: key);
-  // 블루투스 장치를 의미
+  // 블루투스 장치
   final BluetoothDevice device;
+
+  DeviceScreen({
+    Key? key,
+    required this.device
+  }) : super(key: key);
 
   @override
   _DeviceScreenState createState() => _DeviceScreenState();
 }
 
 class _DeviceScreenState extends State<DeviceScreen> {
-  // flutterBlue
+  // flutterBluePlus
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
 
   String stateText = 'Connecting';
@@ -26,10 +30,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
   // 연결 상태 리스너 핸들 화면 종료시 리스너 해제를 위함
   StreamSubscription<BluetoothDeviceState>? _stateListener;
 
-  // 블루투스 서비스의 정보를 검색하고 특성을 읽거나 쓰기위해 사용
+  // 블루투스 서비스의 data를 검색하고 특성을 읽거나 쓰기위해 사용
   List<BluetoothService> bluetoothService = [];
 
-  //
   Map<String, List<int>> notifyDatas = {};
 
   @override
@@ -37,6 +40,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     super.initState();
     // 상태 연결 리스너 등록
     _stateListener = widget.device.state.listen((event) {
+      // disconnect 출력
       debugPrint('event :  $event');
       if (deviceState == event) {
         // 상태가 동일하다면 무시
@@ -88,6 +92,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     }
     //이전 상태 이벤트 저장
     deviceState = event;
+    // 상태 변경 후 위젯 업데이트
     setState(() {});
   }
 
@@ -118,8 +123,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
         //returnValue가 null이면 timeout이 발생한 것이 아니므로 연결 성공
         debugPrint('connection successful');
         print('start discover service');
-        List<BluetoothService> bleServices =
-        await widget.device.discoverServices();
+        // 블루투스 device에서 서비스를 검색하는 작업 수행
+        List<BluetoothService> bleServices = await widget.device.discoverServices();
         setState(() {
           bluetoothService = bleServices;
         });

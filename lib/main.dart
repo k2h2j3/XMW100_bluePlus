@@ -44,6 +44,7 @@ class _MyHomePageState extends State<MyHomePage> {
   void initBle() {
     // BLE 스캔 상태 리스너
     flutterBlue.isScanning.listen((isScanning) {
+      // 스캔상태를 감지할때마다 상태변경
       _isScanning = isScanning;
       // 리스너를 받을 때마다 상태 변경
       setState(() {});
@@ -55,6 +56,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // 스캔 중이 아니라면
       // 기존에 스캔된 리스트 삭제
       scanResultList.clear();
+
       // 스캔 시작, 제한 시간 10초
       flutterBlue.startScan(timeout: Duration(seconds: 10));
       // 스캔 결과가 바뀔때마다 스트림을 등록하고 결과가 수신될때마다 해당함수 호출
@@ -67,8 +69,9 @@ class _MyHomePageState extends State<MyHomePage> {
             if (scanResultList
                 .indexWhere((e) => e.device.id == element.device.id) <
                 0) {
-              // 찾는 장치명이고 scanResultList에 등록된적이 없는 장치라면 리스트에 추가
+              // 찾는 장치명이고 scanResultList에 등록된적이 없는 장치라면 리스트에 추가 후 스캔정지
               scanResultList.add(element);
+              flutterBlue.stopScan();
             }
           }
         });
@@ -78,6 +81,7 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       // 스캔 중이라면 스캔 정지
       flutterBlue.stopScan();
+      _isScanning = false;
     }
   }
 
