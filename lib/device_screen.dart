@@ -301,9 +301,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
       children: [
         Text('temp : ${resultlist[0]/100}'),
         Text('unHumi : ${resultlist[1]/100}'),
-        Text('unAirPressure : ${resultlist[2]/100}'),
-        Text('unWD : ${resultlist[3]/100}'),
-        Text('unWS : ${resultlist[4]/100}'),
+        Text('unAirPressure : ${resultlist[2]/10}'),
+        Text('unWD : ${resultlist[3]}'),
+        Text('unWS : ${resultlist[4]}'),
       ],
     );
   }
