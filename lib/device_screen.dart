@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -99,11 +98,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
     String password = "101010";
     List<int> passwordBytes = List<int>.filled(20, 0);
 
+    for (int i = 0; i < password.length; i++) {
+      passwordBytes[i + 1] = password.codeUnitAt(i);
+    }
+
     passwordBytes[0] = 0x01;
 
-    for (int i = 0; i < password.length; i++) {
-      passwordBytes[i + 1] = int.parse(password[i]);
-    }
     bool characteristicFound = false;
 
     for (BluetoothService service in bluetoothService) {
@@ -117,8 +117,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
             break;
           } catch (e) {
             print('Failed to write password: $e');
-            // 필요한 경우 에러 처리 로직 추가
-            return; // 비밀번호 쓰기 실패 시 함수 종료
+            return;
           }
         }
       }
@@ -127,7 +126,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     if (!characteristicFound) {
       print('Failed to find characteristic to write password');
-      // 필요한 경우 에러 처리 로직 추가
     }
   }
 
