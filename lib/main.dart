@@ -28,7 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  final String targetDeviceName = 'XMW100 1D1F7';
+  final String targetDeviceName = 'XMW100 1A7A7';
 
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
   List<ScanResult> scanResultList = [];
@@ -58,7 +58,9 @@ class _MyHomePageState extends State<MyHomePage> {
       scanResultList.clear();
 
       // 스캔 시작, 제한 시간 10초
-      flutterBlue.startScan(timeout: Duration(seconds: 10));
+      flutterBlue.startScan(
+         // timeout: Duration(seconds: 10)
+      );
       // 스캔 결과가 바뀔때마다 스트림을 등록하고 결과가 수신될때마다 해당함수 호출
       flutterBlue.scanResults.listen((results) {
         // 스캔 결과 목록을 순회

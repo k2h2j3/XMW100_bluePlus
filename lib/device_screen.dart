@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
@@ -35,6 +35,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   Map<String, List<int>> notifyDatas = {};
 
+  final String password = "10101000000000000000";
+
   @override
   initState() {
     super.initState();
@@ -55,7 +57,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   @override
   void dispose() {
-    // 상태 리스터 해제
+    // 상태 리스너 해제
     _stateListener?.cancel();
     // 연결 해제
     disconnect();
@@ -96,6 +98,35 @@ class _DeviceScreenState extends State<DeviceScreen> {
     setState(() {});
   }
 
+  Future<void> writePassword() async {
+    List<int> passwordBytes = utf8.encode(password);
+    bool characteristicFound = false;
+
+    for (BluetoothService service in bluetoothService) {
+      for (BluetoothCharacteristic characteristic in service.characteristics) {
+        if (characteristic.uuid.toString() == "0000fff4-0000-1000-8000-00805f9b34fb") {
+          print('식별자확인');
+          try {
+            await characteristic.write(passwordBytes);
+            print('Password written successfully');
+            characteristicFound = true;
+            break;
+          } catch (e) {
+            print('Failed to write password: $e');
+            // 필요한 경우 에러 처리 로직 추가
+            return; // 비밀번호 쓰기 실패 시 함수 종료
+          }
+        }
+      }
+      if (characteristicFound) break;
+    }
+
+    if (!characteristicFound) {
+      print('Failed to find characteristic to write password');
+      // 필요한 경우 에러 처리 로직 추가
+    }
+  }
+
   Future<bool> connect() async {
     Future<bool>? returnValue;
     setState(() {
@@ -108,8 +139,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
        참고로 autoconnect가 true되어있으면 연결이 지연되는 경우가 있음.
      */
     await widget.device
-        .connect(autoConnect: false)
-        .timeout(Duration(milliseconds: 15000), onTimeout: () {
+        .connect(autoConnect: true)
+        .timeout(Duration(milliseconds: 15000000), onTimeout: () {
       //타임아웃 발생
       //returnValue를 false로 설정
       returnValue = Future.value(false);
@@ -133,15 +164,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
           print('============================================');
           print('Service UUID: ${service.uuid}');
           for (BluetoothCharacteristic c in service.characteristics) {
-            print('\tcharacteristic UUID: ${c.uuid.toString()}');
-            print('\t\twrite: ${c.properties.write}');
-            print('\t\tread: ${c.properties.read}');
-            print('\t\tnotify: ${c.properties.notify}');
-            print('\t\tisNotifying: ${c.isNotifying}');
-            print(
-                '\t\twriteWithoutResponse: ${c.properties.writeWithoutResponse}');
-            print('\t\tindicate: ${c.properties.indicate}');
-
             // notify나 indicate가 true면 디바이스에서 데이터를 보낼 수 있는 캐릭터리스틱이니 활성화 한다.
             // 단, descriptors가 비었다면 notify를 할 수 없으므로 패스!
             if (c.properties.notify && c.descriptors.isNotEmpty) {
@@ -178,6 +200,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
           }
         }
         returnValue = Future.value(true);
+        await writePassword();
+
+        // returnValue = Future.value(true);
       }
     });
 
