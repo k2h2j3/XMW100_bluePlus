@@ -14,3 +14,8 @@
 ## 데이터 일반화
 ![캡처3](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/d4cf74a9-a122-40b2-aeca-b760ad7b8ab5)
 
+## 풍속, 풍향값 출력(풍속값 불확실)
+
+![캡처3](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/5f5e90dd-e578-40f4-97f9-537a5ea48ada)
+
+
