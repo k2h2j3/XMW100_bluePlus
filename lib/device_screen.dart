@@ -77,24 +77,22 @@ class _DeviceScreenState extends State<DeviceScreen> {
     switch (event) {
       case BluetoothDeviceState.disconnected:
         stateText = 'Disconnected';
-        // 버튼 상태 변경
         connectButtonText = 'Connect';
+        connect();
         break;
       case BluetoothDeviceState.disconnecting:
         stateText = 'Disconnecting';
         break;
       case BluetoothDeviceState.connected:
         stateText = 'Connected';
-        // 버튼 상태 변경
         connectButtonText = 'Disconnect';
+        notifyDatas.clear(); // notifyDatas 초기화
         break;
       case BluetoothDeviceState.connecting:
         stateText = 'Connecting';
         break;
     }
-    //이전 상태 이벤트 저장
     deviceState = event;
-    // 상태 변경 후 위젯 업데이트
     setState(() {});
   }
 
