@@ -1,6 +1,6 @@
 # xmw100_1xxxx_blue
 
-## 블루투스 스캔(특정 디바이스)
+## 블루투스 스캔(특정 디바이스) => 3.11 일자 변경점(XMW100 1D1F7 -> XMW100 1A7A7 기기명 변경)
 
 ![캡처1](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/937a323b-41ac-476a-80ec-993e034348a9)
 
