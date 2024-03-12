@@ -222,7 +222,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
       ),
       body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -317,41 +316,94 @@ class _DeviceScreenState extends State<DeviceScreen> {
       return Container();
     }
 
-    return Column(
-      children: [
-        Text(
-          'temp : ${resultlist[0]/100} °C',
-          style: TextStyle(
-            fontSize: 50,
-            fontWeight: FontWeight.bold,
-            color: Colors.red,
+    return Padding(
+      padding: const EdgeInsets.only(left: 30.0),
+      child: Column(
+        children: [
+          Text(
+            'Data',
+            style: TextStyle(
+              fontSize: 100,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
-        Text('unHumi : ${resultlist[1]/100} %',
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.bold,
-          color: Colors.lightBlueAccent,
-        ),),
-        Text('unAirPressure : ${resultlist[2]/10} mmHg',
-        style: TextStyle(
-          fontSize: 40,
-          fontWeight: FontWeight.bold,
-          color: Colors.greenAccent,
-        ),),
-        Text('unWD : ${resultlist[3]/10} 도',
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.bold,
-          color: Colors.yellow,
-        ),),
-        Text('unWS : ${resultlist[4]} m/s',
-        style: TextStyle(
-          fontSize: 50,
-          fontWeight: FontWeight.bold,
-          color: Colors.deepOrange,
-        ),),
-      ],
+          SizedBox(height: 70),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.thermostat, size: 100, color: Colors.red),
+              SizedBox(width: 10),
+              Text(
+                '${resultlist[0]/100} °C',
+                style: TextStyle(
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.water_drop, size: 100, color: Colors.blue),
+              SizedBox(width: 10),
+              Text(
+                '${resultlist[1]/100} %',
+                style: TextStyle(
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.speed, size: 100, color: Colors.green),
+              SizedBox(width: 10),
+              Text(
+                '${resultlist[2]/10} mmHg',
+                style: TextStyle(
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.navigation, size: 100, color: Colors.orange),
+              SizedBox(width: 10),
+              Text(
+                '${resultlist[3]/10} 도',
+                style: TextStyle(
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(Icons.wind_power, size: 100, color: Colors.purple),
+              SizedBox(width: 10),
+              Text(
+                '${resultlist[4]/100} m/s',
+                style: TextStyle(
+                  fontSize: 70,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -374,10 +426,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   /* Service 정보 아이템 위젯 */
   Widget listItem(BluetoothService r) {
-    return ListTile(
-      onTap: null,
-      title: characteristicInfo(r),
-    );
+    return characteristicInfo(r);
   }
 }
 
