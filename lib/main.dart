@@ -39,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     // 초기화
     initBle();
+    scan();
   }
 
   void initBle() {
@@ -165,11 +166,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       /* 장치 검색 or 검색 중지  */
-      floatingActionButton: FloatingActionButton(
-        onPressed: scan,
-        // 스캔 중이라면 stop 아이콘을, 정지상태라면 search 아이콘으로 표시
-        child: Icon(_isScanning ? Icons.stop : Icons.search),
-      ),
     );
   }
 }

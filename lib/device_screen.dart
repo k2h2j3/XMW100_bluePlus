@@ -76,7 +76,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
       case BluetoothDeviceState.disconnected:
         stateText = 'Disconnected';
         connectButtonText = 'Connect';
-        connect();
         break;
       case BluetoothDeviceState.disconnecting:
         stateText = 'Disconnecting';
@@ -137,7 +136,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
 
     await widget.device
-        .connect(autoConnect: true)
+        .connect(autoConnect: false)
         .timeout(Duration(milliseconds: 15000000), onTimeout: () {
       //타임아웃 발생
       //returnValue를 false로 설정
@@ -189,7 +188,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   });
 
                   // 설정 후 일정시간 지연
-                  await Future.delayed(const Duration(milliseconds: 500));
+                  // await Future.delayed(const Duration(milliseconds: 500));
                 } catch (e) {
                   print('error ${c.uuid} $e');
                 }
@@ -320,11 +319,38 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
     return Column(
       children: [
-        Text('temp : ${resultlist[0]/100}'),
-        Text('unHumi : ${resultlist[1]/100}'),
-        Text('unAirPressure : ${resultlist[2]/10}'),
-        Text('unWD : ${resultlist[3]}'),
-        Text('unWS : ${resultlist[4]}'),
+        Text(
+          'temp : ${resultlist[0]/100} °C',
+          style: TextStyle(
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+          ),
+        ),
+        Text('unHumi : ${resultlist[1]/100} %',
+        style: TextStyle(
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
+          color: Colors.lightBlueAccent,
+        ),),
+        Text('unAirPressure : ${resultlist[2]/10} mmHg',
+        style: TextStyle(
+          fontSize: 40,
+          fontWeight: FontWeight.bold,
+          color: Colors.greenAccent,
+        ),),
+        Text('unWD : ${resultlist[3]/10} 도',
+        style: TextStyle(
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
+          color: Colors.yellow,
+        ),),
+        Text('unWS : ${resultlist[4]} m/s',
+        style: TextStyle(
+          fontSize: 50,
+          fontWeight: FontWeight.bold,
+          color: Colors.deepOrange,
+        ),),
       ],
     );
   }
@@ -350,8 +376,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
   Widget listItem(BluetoothService r) {
     return ListTile(
       onTap: null,
-      title: serviceUUID(r),
-      subtitle: characteristicInfo(r),
+      title: characteristicInfo(r),
     );
   }
 }
