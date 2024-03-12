@@ -19,4 +19,9 @@
 
 ![캡처3](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/5f5e90dd-e578-40f4-97f9-537a5ea48ada)
 
+## 최종 데이터 출력
+
+![캡처5](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/3fb5ba71-9086-4590-a520-e562d8b2529f)
+
+
 
