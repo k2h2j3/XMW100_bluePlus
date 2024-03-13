@@ -34,6 +34,8 @@ class _DeviceScreenState extends State<DeviceScreen> {
 
   Map<String, List<int>> notifyDatas = {};
 
+  List<int> prevResultList = List.filled(5, 0);
+
 
   @override
   initState() {
@@ -76,6 +78,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       case BluetoothDeviceState.disconnected:
         stateText = 'Disconnected';
         connectButtonText = 'Connect';
+        showReconnectDialog();
         break;
       case BluetoothDeviceState.disconnecting:
         stateText = 'Disconnecting';
@@ -204,6 +207,32 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return returnValue ?? Future.value(false);
   }
 
+  Future<void> showReconnectDialog() async {
+    bool? reconnect = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('연결 끊김'),
+          content: Text('디바이스와의 연결이 끊어졌습니다. 재연결하시겠습니까?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('아니오'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text('예'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (reconnect ?? false) {
+      await connect();
+    }
+  }
+
   void disconnect() {
     try {
       setState(() {
@@ -316,6 +345,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
       return Container();
     }
 
+    List<int> diffList = List.generate(5, (index) => resultlist[index] - prevResultList[index]);
+
+    prevResultList = List.from(resultlist);
+
     return Padding(
       padding: const EdgeInsets.only(left: 30.0),
       child: Column(
@@ -340,6 +373,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              Icon(
+                diffList[0] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                color: diffList[0] >= 0 ? Colors.red : Colors.blue,
+              ),
             ],
           ),
           SizedBox(height: 40),
@@ -354,6 +391,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontSize: 70,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Icon(
+                diffList[1] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                color: diffList[1] >= 0 ? Colors.red : Colors.blue,
               ),
             ],
           ),
@@ -370,6 +411,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              Icon(
+                diffList[2] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                color: diffList[2] >= 0 ? Colors.red : Colors.blue,
+              ),
             ],
           ),
           SizedBox(height: 40),
@@ -385,6 +430,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              Icon(
+                diffList[3] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                color: diffList[3] >= 0 ? Colors.red : Colors.blue,
+              ),
             ],
           ),
           SizedBox(height: 40),
@@ -399,6 +448,10 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontSize: 70,
                   fontWeight: FontWeight.bold,
                 ),
+              ),
+              Icon(
+                diffList[4] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
+                color: diffList[4] >= 0 ? Colors.red : Colors.blue,
               ),
             ],
           ),
