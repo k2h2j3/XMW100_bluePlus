@@ -5,12 +5,10 @@ import 'characteristic_info.dart';
 class ListItem extends StatelessWidget {
   final BluetoothService service;
   final Map<String, List<int>> notifyDatas;
-  final List<int> prevResultList;
 
   ListItem({
     required this.service,
     required this.notifyDatas,
-    required this.prevResultList,
   });
 
   @override
@@ -18,7 +16,6 @@ class ListItem extends StatelessWidget {
     return CharacteristicInfo(
       service: service,
       notifyDatas: notifyDatas,
-      prevResultList: prevResultList,
     );
   }
 }

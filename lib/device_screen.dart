@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'characteristic_info.dart';
 import 'list_item.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -21,7 +20,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
   StreamSubscription<BluetoothDeviceState>? _stateListener;
   List<BluetoothService> bluetoothService = [];
   Map<String, List<int>> notifyDatas = {};
-  List<int> prevResultList = List.filled(5, 0);
 
   @override
   void initState() {
@@ -233,7 +231,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   return ListItem(
                     service: bluetoothService[index],
                     notifyDatas: notifyDatas,
-                    prevResultList: prevResultList,
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {

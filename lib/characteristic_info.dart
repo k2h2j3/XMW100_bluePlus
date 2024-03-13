@@ -2,18 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'data_parser.dart';
 
-
-// 추출데이터 위젯
-class CharacteristicInfo extends StatelessWidget {
+class CharacteristicInfo extends StatefulWidget {
   final BluetoothService service;
   final Map<String, List<int>> notifyDatas;
-  final List<int> prevResultList;
 
   CharacteristicInfo({
     required this.service,
     required this.notifyDatas,
-    required this.prevResultList,
   });
+
+  @override
+  _CharacteristicInfoState createState() => _CharacteristicInfoState();
+}
+
+class _CharacteristicInfoState extends State<CharacteristicInfo> {
+  List<int> prevResultList = List.filled(5, 0);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class CharacteristicInfo extends StatelessWidget {
     List<int> datalist = [];
     List<int> resultlist = [];
 
-    for (BluetoothCharacteristic c in service.characteristics) {
+    for (BluetoothCharacteristic c in widget.service.characteristics) {
       properties = '';
       data = '';
       name += '\t\t${c.uuid}\n';
@@ -37,9 +40,9 @@ class CharacteristicInfo extends StatelessWidget {
       }
       if (c.properties.notify) {
         properties += 'Notify ';
-        if (notifyDatas.containsKey(c.uuid.toString())) {
-          if (notifyDatas[c.uuid.toString()]!.isNotEmpty) {
-            data = notifyDatas[c.uuid.toString()].toString();
+        if (widget.notifyDatas.containsKey(c.uuid.toString())) {
+          if (widget.notifyDatas[c.uuid.toString()]!.isNotEmpty) {
+            data = widget.notifyDatas[c.uuid.toString()].toString();
             datalist = parseData(data);
             resultlist.add((datalist[2].toUnsigned(16) << 8) + datalist[3].toUnsigned(16));
             resultlist.add((datalist[4].toUnsigned(16) << 8) + datalist[5].toUnsigned(16));
@@ -65,7 +68,107 @@ class CharacteristicInfo extends StatelessWidget {
       return Container();
     }
 
-    List<int> diffList = List.generate(5, (index) => resultlist[index] - prevResultList[index]);
+    List<Widget> dataWidgets = [];
+    for (int i = 0; i < resultlist.length; i++) {
+      IconData icon;
+      Color color;
+      String unit;
+      double divider;
+
+      switch (i) {
+        case 0:
+          icon = Icons.thermostat;
+          color = Colors.red;
+          unit = '°C';
+          divider = 100;
+          break;
+        case 1:
+          icon = Icons.water_drop;
+          color = Colors.blue;
+          unit = '%';
+          divider = 100;
+          break;
+        case 2:
+          icon = Icons.speed;
+          color = Colors.green;
+          unit = 'mmHg';
+          divider = 10;
+          break;
+        case 3:
+          icon = Icons.navigation;
+          color = Colors.orange;
+          unit = '도';
+          divider = 10;
+          break;
+        case 4:
+          icon = Icons.wind_power;
+          color = Colors.purple;
+          unit = 'm/s';
+          divider = 100;
+          break;
+        default:
+          icon = Icons.error;
+          color = Colors.grey;
+          unit = '';
+          divider = 1;
+      }
+
+      double currentValue = resultlist[i] / divider;
+      double prevValue = prevResultList[i] / divider;
+      double diff = currentValue - prevValue;
+      String arrow = (diff > 0)
+          ? '▲'
+          : (diff < 0)
+          ? '▼'
+          : '━';
+      Color diffColor = (diff > 0)
+          ? Colors.red
+          : (diff < 0)
+          ? Colors.blue
+          : Colors.grey;
+
+      dataWidgets.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Icon(icon, size: 100, color: color),
+              SizedBox(width: 10),
+              Text(
+                '$currentValue $unit',
+                style: TextStyle(
+                  fontSize: 50,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(width: 10),
+              Row(
+                children: [
+                  Text(
+                    arrow,
+                    style: TextStyle(
+                      fontSize: 50,
+                      color: diffColor,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    '${diff.abs().toStringAsFixed(2)} $unit',
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: diffColor,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    prevResultList = resultlist;
 
     return Padding(
       padding: const EdgeInsets.only(left: 30.0),
@@ -79,145 +182,7 @@ class CharacteristicInfo extends StatelessWidget {
             ),
           ),
           SizedBox(height: 70),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.thermostat, size: 100, color: Colors.red),
-              SizedBox(width: 10),
-              Text(
-                '${resultlist[0] / 100} °C',
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[0] / 100 >= 0 ? "+" : ""}${diffList[0] / 100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[0] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                diffList[0] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                color: diffList[0] >= 0 ? Colors.red : Colors.blue,
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.water_drop, size: 100, color: Colors.blue),
-              SizedBox(width: 10),
-              Text(
-                '${resultlist[1] / 100} %',
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[1] / 100 >= 0 ? "+" : ""}${diffList[1] / 100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[1] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                diffList[1] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                color: diffList[1] >= 0 ? Colors.red : Colors.blue,
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.speed, size: 100, color: Colors.green),
-              SizedBox(width: 10),
-              Text(
-                '${resultlist[2] / 10} mmHg',
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[2] / 100 >= 0 ? "+" : ""}${diffList[2] / 100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[2] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                diffList[2] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                color: diffList[2] >= 0 ? Colors.red : Colors.blue,
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.navigation, size: 100, color: Colors.orange),
-              SizedBox(width: 10),
-              Text(
-                '${resultlist[3] / 10} 도',
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[3] / 100 >= 0 ? "+" : ""}${diffList[3] / 100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[3] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                diffList[3] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                color: diffList[3] >= 0 ? Colors.red : Colors.blue,
-              ),
-            ],
-          ),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(Icons.wind_power, size: 100, color: Colors.purple),
-              SizedBox(width: 10),
-              Text(
-                '${resultlist[4] / 100} m/s',
-                style: TextStyle(
-                  fontSize: 70,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[4] / 100 >= 0 ? "+" : ""}${diffList[4] / 100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[4] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
-              Icon(
-                diffList[4] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
-                color: diffList[4] >= 0 ? Colors.red : Colors.blue,
-              ),
-            ],
-          ),
+          ...dataWidgets,
         ],
       ),
     );
