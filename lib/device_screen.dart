@@ -373,6 +373,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 10),
+              Text(
+                '${diffList[0]/100 >= 0 ? "+" : ""}${diffList[0]/100}',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: diffList[0] >= 0 ? Colors.red : Colors.blue,
+                ),
+              ),
+              SizedBox(width: 5),
               Icon(
                 diffList[0] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[0] >= 0 ? Colors.red : Colors.blue,
@@ -392,6 +401,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 10),
+              Text(
+                '${diffList[1]/100 >= 0 ? "+" : ""}${diffList[1]/100}',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: diffList[1] >= 0 ? Colors.red : Colors.blue,
+                ),
+              ),
+              SizedBox(width: 5),
               Icon(
                 diffList[1] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[1] >= 0 ? Colors.red : Colors.blue,
@@ -411,6 +429,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 10),
+              Text(
+                '${diffList[2]/100 >= 0 ? "+" : ""}${diffList[2]/100}',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: diffList[2] >= 0 ? Colors.red : Colors.blue,
+                ),
+              ),
+              SizedBox(width: 5),
               Icon(
                 diffList[2] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[2] >= 0 ? Colors.red : Colors.blue,
@@ -430,6 +457,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 10),
+              Text(
+                '${diffList[3]/100 >= 0 ? "+" : ""}${diffList[3]/100}',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: diffList[3] >= 0 ? Colors.red : Colors.blue,
+                ),
+              ),
+              SizedBox(width: 5),
               Icon(
                 diffList[3] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[3] >= 0 ? Colors.red : Colors.blue,
@@ -449,6 +485,15 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              SizedBox(width: 10),
+              Text(
+                '${diffList[4]/100 >= 0 ? "+" : ""}${diffList[4]/100}',
+                style: TextStyle(
+                  fontSize: 30,
+                  color: diffList[4] >= 0 ? Colors.red : Colors.blue,
+                ),
+              ),
+              SizedBox(width: 5),
               Icon(
                 diffList[4] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[4] >= 0 ? Colors.red : Colors.blue,
