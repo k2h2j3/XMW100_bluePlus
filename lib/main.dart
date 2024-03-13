@@ -7,7 +7,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final title = 'BLE Scan & Connection Demo';
+  final title = 'BLE Scan & Connection';
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyHomePage({
+    Key? key,
+    required this.title
+  }) : super(key: key);
+
   final String title;
 
   @override
@@ -58,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // 기존에 스캔된 리스트 삭제
       scanResultList.clear();
 
-      // 스캔 시작, 제한 시간 10초
+      // 스캔 시작
       flutterBlue.startScan(
          // timeout: Duration(seconds: 10)
       );
