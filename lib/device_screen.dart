@@ -373,15 +373,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(width: 10),
-              Text(
-                '${diffList[0]/100 >= 0 ? "+" : ""}${diffList[0]/100}',
-                style: TextStyle(
-                  fontSize: 30,
-                  color: diffList[0] >= 0 ? Colors.red : Colors.blue,
-                ),
-              ),
-              SizedBox(width: 5),
+
               Icon(
                 diffList[0] >= 0 ? Icons.arrow_upward : Icons.arrow_downward,
                 color: diffList[0] >= 0 ? Colors.red : Colors.blue,
