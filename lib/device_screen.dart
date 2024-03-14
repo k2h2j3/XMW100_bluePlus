@@ -206,6 +206,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
         title: Text(widget.device.name),
         leading: IconButton(
           onPressed: () {
+            _stateListener?.cancel();
             disconnect();
             Navigator.of(context).pop();
           },
