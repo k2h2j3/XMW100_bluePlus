@@ -164,26 +164,44 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return returnValue ?? Future.value(false);
   }
 
-  Future<void> showReconnectDialog() async {
-    bool? reconnect = await showDialog<bool>(
+  Future<bool?> showTimerDialog(BuildContext context) {
+    bool? reconnect;
+    Timer? timer;
+
+    timer = Timer(Duration(seconds: 10), () {
+      Navigator.of(context).pop(true);
+    });
+
+    return showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('연결 끊김'),
           content: Text('디바이스와의 연결이 끊어졌습니다. 재연결하시겠습니까?'),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
+              onPressed: () {
+                timer?.cancel();
+                Navigator.of(context).pop(false);
+              },
               child: Text('아니오'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                timer?.cancel();
+                Navigator.of(context).pop(true);
+              },
               child: Text('예'),
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> showReconnectDialog() async {
+    bool? reconnect = await showTimerDialog(context);
 
     if (reconnect ?? false) {
       await connect();
