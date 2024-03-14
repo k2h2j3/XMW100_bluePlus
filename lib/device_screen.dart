@@ -204,6 +204,13 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.device.name),
+        leading: IconButton(
+          onPressed: () {
+            disconnect();
+            Navigator.of(context).pop();
+          },
+          icon: Icon(Icons.arrow_back),
+        ),
       ),
       body: Center(
         child: Column(
