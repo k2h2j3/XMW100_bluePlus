@@ -23,5 +23,10 @@
 
 ![캡처5](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/3fb5ba71-9086-4590-a520-e562d8b2529f)
 
+## UI 보완
+
+![보완1](https://github.com/k2h2j3/XMW100_bluePlus/assets/74819625/5a6aa996-af92-42b9-b485-93612096d04c)
+
+
 
 
