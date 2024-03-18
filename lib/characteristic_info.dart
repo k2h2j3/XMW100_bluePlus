@@ -97,7 +97,7 @@ class _CharacteristicInfoState extends State<CharacteristicInfo> {
         case 3:
           icon = Icons.navigation;
           color = Colors.orange;
-          unit = '도';
+          unit = '°';
           divider = 10;
           break;
         case 4:
@@ -131,34 +131,57 @@ class _CharacteristicInfoState extends State<CharacteristicInfo> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Icon(icon, size: 100, color: color),
-              SizedBox(width: 10),
-              Text(
-                '$currentValue $unit',
-                style: TextStyle(
-                  fontSize: 50,
-                  fontWeight: FontWeight.bold,
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                padding: EdgeInsets.all(20),
+                child: Icon(icon, size: 120, color: color), // 아이콘 크기 증가
               ),
-              SizedBox(width: 10),
-              Row(
+              SizedBox(width: 20),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    arrow,
-                    style: TextStyle(
-                      fontSize: 50,
-                      color: diffColor,
-                    ),
+                  Row(
+                    children: [
+                      Text(
+                        '$currentValue',
+                        style: TextStyle(
+                          fontSize: 50,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        unit,
+                        style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.grey, // 단위 색상 변경
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: 5),
-                  Text(
-                    '${diff.abs().toStringAsFixed(2)} $unit',
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: diffColor,
-                    ),
+                  SizedBox(height: 10),
+                  Row(
+                    children: [
+                      Text(
+                        arrow,
+                        style: TextStyle(fontSize: 50, color: diffColor),
+                      ),
+                      SizedBox(width: 10),
+                      Text(
+                        '${diff.abs().toStringAsFixed(2)}',
+                        style: TextStyle(fontSize: 30, color: diffColor),
+                      ),
+                      SizedBox(width: 5),
+                      Text(
+                        unit,
+                        style: TextStyle(fontSize: 20, color: Colors.grey),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -170,20 +193,17 @@ class _CharacteristicInfoState extends State<CharacteristicInfo> {
 
     prevResultList = resultlist;
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 30.0),
-      child: Column(
-        children: [
-          Text(
-            'Data',
-            style: TextStyle(
-              fontSize: 100,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          SizedBox(height: 70),
-          ...dataWidgets,
-        ],
+    return Container(
+      color: Colors.lightBlue[100],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 30.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+
+            ...dataWidgets,
+          ],
+        ),
       ),
     );
   }

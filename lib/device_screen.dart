@@ -222,6 +222,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.device.name),
+        backgroundColor: Colors.blue, // 진한 파란색
         leading: IconButton(
           onPressed: () {
             _stateListener?.cancel();
@@ -230,41 +231,53 @@ class _DeviceScreenState extends State<DeviceScreen> {
           },
           icon: Icon(Icons.arrow_back),
         ),
+        actions: [
+          Icon(
+            Icons.bluetooth,
+            color: deviceState == BluetoothDeviceState.connected ? Colors.white : Colors.grey, // 연결 상태에 따른 아이콘 색상 변경
+          ),
+        ],
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text('$stateText'),
-                OutlinedButton(
-                  onPressed: () {
-                    if (deviceState == BluetoothDeviceState.connected) {
-                      disconnect();
-                    } else if (deviceState == BluetoothDeviceState.disconnected) {
-                      connect();
-                    }
-                  },
-                  child: Text(connectButtonText),
-                ),
-              ],
-            ),
-            Expanded(
-              child: ListView.separated(
-                itemCount: bluetoothService.length,
-                itemBuilder: (context, index) {
-                  return ListItem(
-                    service: bluetoothService[index],
-                    notifyDatas: notifyDatas,
-                  );
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Divider();
-                },
+      body: Container(
+        color: Colors.lightBlue[100], // 연한 파란색 배경
+        child: Center(
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Text('$stateText'),
+                  if (deviceState == BluetoothDeviceState.connecting)
+                    CircularProgressIndicator(), // 로딩 스피너 추가
+                  if (deviceState != BluetoothDeviceState.connecting)
+                    OutlinedButton(
+                      onPressed: () {
+                        if (deviceState == BluetoothDeviceState.connected) {
+                          disconnect();
+                        } else if (deviceState == BluetoothDeviceState.disconnected) {
+                          connect();
+                        }
+                      },
+                      child: Text(connectButtonText),
+                    ),
+                ],
               ),
-            ),
-          ],
+              Expanded(
+                child: ListView.separated(
+                  itemCount: bluetoothService.length,
+                  itemBuilder: (context, index) {
+                    return ListItem(
+                      service: bluetoothService[index],
+                      notifyDatas: notifyDatas,
+                    );
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Divider();
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
