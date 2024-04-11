@@ -32,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
 
-  final String targetDeviceName = 'XMW100 1A7A7';
+  // final String targetDeviceName = 'XMW100 1A7A7';
 
   FlutterBluePlus flutterBlue = FlutterBluePlus.instance;
   List<ScanResult> scanResultList = [];
@@ -71,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
         // 스캔 결과 목록을 순회
         results.forEach((element) {
           //찾는 장치명인지 확인
-          if (element.device.name == targetDeviceName) {
+          if (element.device.name.startsWith('XMW')) { // 이 부분을 수정합니다
             // 장치의 ID를 비교해 이미 등록된 장치인지 확인
             if (scanResultList
                 .indexWhere((e) => e.device.id == element.device.id) <
